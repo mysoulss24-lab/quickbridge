@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../../core/theme/theme.dart';
-import '../../../providers/pairing_provider.dart';
+import 'package:quickbridge/core/theme/theme.dart';
+import 'package:quickbridge/presentation/providers/pairing_provider.dart';
 import '../shared/settings_screen.dart';
 import 'windows_connected_screen.dart';
 
@@ -66,7 +66,7 @@ class _QRPairScreenState extends ConsumerState<QRPairScreen> {
 
     // Listen to pairing updates. If paired, transition to Desktop Hub.
     ref.listen(pairingProvider, (previous, next) {
-      if (next.pairing != null && next.pairing!.status == 'paired') {
+      if (next.pairing != null && next.pairing?.status == 'paired') {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const WindowsConnectedScreen()),
         );

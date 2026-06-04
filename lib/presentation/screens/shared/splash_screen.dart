@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../theme/theme.dart';
-import '../../providers/pairing_provider.dart';
+import 'package:quickbridge/core/theme/theme.dart';
+import 'package:quickbridge/presentation/providers/pairing_provider.dart';
 import '../android/scan_qr_screen.dart';
 import '../android/android_connected_screen.dart';
 import '../windows/qr_pair_screen.dart';
@@ -33,7 +33,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
     );
 
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.6, curve: Curves.outBack)),
+      CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack)),
     );
 
     _controller.forward();
@@ -45,7 +45,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
     if (!mounted) return;
 
     final pairingState = ref.read(pairingProvider);
-    final bool isPaired = pairingState.pairing != null && pairingState.pairing!.status == 'paired';
+    final bool isPaired = pairingState.pairing != null && pairingState.pairing?.status == 'paired';
 
     Widget nextScreen;
     if (Platform.isAndroid) {

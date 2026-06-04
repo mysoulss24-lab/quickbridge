@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/settings_provider.dart';
-import '../../providers/pairing_provider.dart';
-import '../../theme/theme.dart';
+import 'package:quickbridge/presentation/providers/settings_provider.dart';
+import 'package:quickbridge/presentation/providers/pairing_provider.dart';
+import 'package:quickbridge/core/theme/theme.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -140,13 +140,15 @@ class SettingsScreen extends ConsumerWidget {
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.primary,
-        letterSpacing: 1.0,
+      child: Text(
+        title.toUpperCase(),
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+          letterSpacing: 1.0,
+        ),
       ),
-      child: Text(title.toUpperCase()),
     );
   }
 }

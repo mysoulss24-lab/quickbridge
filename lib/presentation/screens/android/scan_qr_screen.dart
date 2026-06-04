@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../theme/theme.dart';
-import '../../../providers/pairing_provider.dart';
+import 'package:quickbridge/core/theme/theme.dart';
+import 'package:quickbridge/presentation/providers/pairing_provider.dart';
 import '../shared/settings_screen.dart';
 import 'android_connected_screen.dart';
 
@@ -143,20 +143,20 @@ class _ScanQRScreenState extends ConsumerState<ScanQRScreen> {
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
-                        textAlign: Center,
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 12),
                       const Text(
                         'Open QuickBridge on your Windows PC and scan the generated QR Code to begin transferring files.',
                         style: TextStyle(fontSize: 15, color: Colors.grey),
-                        textAlign: Center,
+                        textAlign: TextAlign.center,
                       ),
                       if (pairingState.errorMessage != null) ...[
                         const SizedBox(height: 16),
                         Text(
                           pairingState.errorMessage!,
                           style: const TextStyle(color: Colors.redAccent),
-                          textAlign: Center,
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ],
@@ -203,7 +203,7 @@ class _ScanQRScreenState extends ConsumerState<ScanQRScreen> {
                           top: 16,
                           left: 16,
                           child: CircleAvatar(
-                            backgroundColor: Colors.black50,
+                            backgroundColor: Colors.black54,
                             child: IconButton(
                               icon: const Icon(Icons.arrow_back, color: Colors.white),
                               onPressed: () => setState(() => _isScanning = false),
@@ -217,7 +217,7 @@ class _ScanQRScreenState extends ConsumerState<ScanQRScreen> {
                 const SizedBox(height: 24),
                 const Text(
                   'Center the QR Code inside the box to scan',
-                  textAlign: Center,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 ),
               ],

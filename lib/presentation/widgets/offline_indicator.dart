@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/transfer_provider.dart';
+import 'package:quickbridge/presentation/providers/transfer_provider.dart';
 
 class OfflineIndicator extends ConsumerWidget {
   const OfflineIndicator({super.key});

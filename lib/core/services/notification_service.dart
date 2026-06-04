@@ -46,8 +46,6 @@ class NotificationService {
     } else if (Platform.isWindows) {
       await localNotifier.setup(
         appName: 'QuickBridge',
-        // The shortcutId is only required if you want to bundle it as MSIX packaging.
-        shortcutId: 'com.quickbridge.app',
       );
     }
 
@@ -95,7 +93,7 @@ class NotificationService {
         body: body,
       );
       
-      notification.show();
+      await notification.show();
     }
   }
 }

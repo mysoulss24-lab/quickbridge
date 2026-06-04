@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:open_filex/open_filex.dart';
-import '../../../core/theme/theme.dart';
-import '../../../core/utils/file_utils.dart';
-import '../../../providers/pairing_provider.dart';
-import '../../../providers/transfer_provider.dart';
-import '../../widgets/file_transfer_card.dart';
-import '../../widgets/offline_indicator.dart';
+import 'package:quickbridge/core/theme/theme.dart';
+import 'package:quickbridge/core/utils/file_utils.dart';
+import 'package:quickbridge/presentation/providers/pairing_provider.dart';
+import 'package:quickbridge/presentation/providers/transfer_provider.dart';
+import 'package:quickbridge/presentation/widgets/file_transfer_card.dart';
+import 'package:quickbridge/presentation/widgets/offline_indicator.dart';
 import '../shared/settings_screen.dart';
 import 'scan_qr_screen.dart';
 

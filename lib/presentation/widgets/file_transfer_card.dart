@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../utils/file_utils.dart';
-import '../../providers/transfer_provider.dart';
+import 'package:quickbridge/core/utils/file_utils.dart';
+import 'package:quickbridge/presentation/providers/transfer_provider.dart';
 
 class FileTransferCard extends StatelessWidget {
   final TransferProgress progress;
