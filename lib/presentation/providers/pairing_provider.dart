@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/models/pairing_model.dart';
 import '../../domain/repositories/pairing_repository.dart';
 import '../../data/repositories/pairing_repository_impl.dart';
@@ -127,7 +128,7 @@ class PairingNotifier extends StateNotifier<PairingState> {
       await _repository.updateCleanupConfig(pairId, hours);
       _ref.read(settingsProvider.notifier).updateCleanupHours(hours);
     } catch (e) {
-      print('Failed to update cleanup config in Firestore: $e');
+      debugPrint('Failed to update cleanup config in Firestore: $e');
     }
   }
 

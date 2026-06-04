@@ -13,5 +13,6 @@ void main() {
 
     // Verify the splash screen is displayed.
     expect(find.text('QuickBridge'), findsOneWidget);
+
   });
 }

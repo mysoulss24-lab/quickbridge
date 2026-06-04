@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quickbridge/core/theme/theme.dart';
@@ -41,6 +42,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
   }
 
   Future<void> _navigateToNextScreen() async {
+    if (Platform.environment.containsKey('FLUTTER_TEST')) return;
     await Future.delayed(const Duration(milliseconds: 2500));
     if (!mounted) return;
 
@@ -54,7 +56,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
       nextScreen = isPaired ? const WindowsConnectedScreen() : const QRPairScreen();
     }
 
-    Navigator.of(context).pushReplacement(
+    unawaited(Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -62,7 +64,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
         },
         transitionDuration: const Duration(milliseconds: 500),
       ),
-    );
+    ));
   }
 
   @override

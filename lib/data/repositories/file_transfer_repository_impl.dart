@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/constants/constants.dart';
 import '../../domain/models/file_metadata_model.dart';
 import '../../domain/repositories/file_transfer_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class FileTransferRepositoryImpl implements FileTransferRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -44,7 +45,7 @@ class FileTransferRepositoryImpl implements FileTransferRepository {
 
     try {
       await uploadTask;
-      subscription.cancel();
+      unawaited(subscription.cancel());
       
       // 3. Write metadata to Firestore under killings subcollection
       final FileMetadataModel metadata = FileMetadataModel(
@@ -67,7 +68,7 @@ class FileTransferRepositoryImpl implements FileTransferRepository {
           
       completer.complete();
     } catch (e) {
-      subscription.cancel();
+      unawaited(subscription.cancel());
       completer.completeError(e);
     }
 
@@ -217,7 +218,7 @@ class FileTransferRepositoryImpl implements FileTransferRepository {
           await deleteFile(pairId: pairId, fileId: fileId, storagePath: storagePath);
         } catch (e) {
           // log error and continue
-          print('Local Cleanup Sweep failed for file $fileId: $e');
+          debugPrint('Local Cleanup Sweep failed for file $fileId: $e');
         }
       }
     }

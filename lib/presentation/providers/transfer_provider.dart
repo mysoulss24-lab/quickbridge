@@ -233,10 +233,10 @@ class TransferNotifier extends StateNotifier<TransferState> {
       );
 
       // Success
-      _notificationService.showNotification(
+      unawaited(_notificationService.showNotification(
         title: 'Upload Completed! 📤',
         body: '$fileName uploaded successfully.',
-      );
+      ));
 
       // Remove from active
       final afterSuccessActive = Map<String, TransferProgress>.from(state.activeTransfers);
@@ -283,7 +283,7 @@ class TransferNotifier extends StateNotifier<TransferState> {
     state = state.copyWith(activeTransfers: active);
 
     try {
-      final downloadedFile = await _repository.downloadFile(
+      await _repository.downloadFile(
         storagePath: fileMeta.storagePath,
         fileName: fileMeta.fileName,
         onProgress: (bytes, total) {
@@ -304,10 +304,10 @@ class TransferNotifier extends StateNotifier<TransferState> {
       );
 
       // Success Notification
-      _notificationService.showNotification(
+      unawaited(_notificationService.showNotification(
         title: 'Download Completed! 📥',
         body: '${fileMeta.fileName} saved to Downloads.',
-      );
+      ));
 
       // Remove from active
       final afterSuccessActive = Map<String, TransferProgress>.from(state.activeTransfers);
@@ -336,10 +336,10 @@ class TransferNotifier extends StateNotifier<TransferState> {
         storagePath: fileMeta.storagePath,
       );
 
-      _notificationService.showNotification(
+      unawaited(_notificationService.showNotification(
         title: 'File Deleted 🗑️',
         body: '${fileMeta.fileName} was permanently removed.',
-      );
+      ));
     } catch (e) {
       state = state.copyWith(errorMessage: 'Delete failed: $e');
     }

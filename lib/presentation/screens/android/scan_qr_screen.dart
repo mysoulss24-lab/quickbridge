@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -75,9 +76,9 @@ class _ScanQRScreenState extends ConsumerState<ScanQRScreen> {
 
       // 3. Navigate to Android Connected Hub
       if (mounted) {
-        Navigator.of(context).pushReplacement(
+        unawaited(Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const AndroidConnectedScreen()),
-        );
+        ));
       }
     } catch (e) {
       setState(() {
