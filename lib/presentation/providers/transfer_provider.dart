@@ -2,14 +2,24 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../../domain/models/file_metadata_model.dart';
 import '../../domain/repositories/file_transfer_repository.dart';
 import '../../data/repositories/file_transfer_repository_impl.dart';
+import '../../data/repositories/mock_file_transfer_repository.dart';
 import '../../core/utils/file_utils.dart';
 import '../../core/utils/speed_calculator.dart';
 import '../../core/services/notification_service.dart';
 import 'pairing_provider.dart';
 import 'settings_provider.dart';
+
+final fileTransferRepositoryProvider = Provider<FileTransferRepository>((ref) {
+  final demoMode = ref.watch(demoModeProvider);
+  if (Firebase.apps.isEmpty || demoMode) {
+    return MockFileTransferRepository();
+  }
+  return FileTransferRepositoryImpl();
+});
 
 // Transfer status tracker class
 class TransferProgress {
@@ -89,7 +99,7 @@ class TransferState {
 }
 
 class TransferNotifier extends StateNotifier<TransferState> {
-  final FileTransferRepository _repository = FileTransferRepositoryImpl();
+  final FileTransferRepository _repository;
   final NotificationService _notificationService = NotificationService();
   StreamSubscription<List<FileMetadataModel>>? _filesSubscription;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
@@ -98,7 +108,9 @@ class TransferNotifier extends StateNotifier<TransferState> {
   // Track seen files to prevent notifying for pre-existing files
   final Set<String> _notifiedFiles = {};
 
-  TransferNotifier(this._ref) : super(TransferState()) {
+  TransferNotifier(this._ref)
+      : _repository = _ref.read(fileTransferRepositoryProvider),
+        super(TransferState()) {
     _initConnectivityListener();
     _initPairingListener();
   }

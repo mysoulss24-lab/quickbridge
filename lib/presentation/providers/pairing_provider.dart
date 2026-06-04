@@ -3,10 +3,22 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../../domain/models/pairing_model.dart';
 import '../../domain/repositories/pairing_repository.dart';
 import '../../data/repositories/pairing_repository_impl.dart';
+import '../../data/repositories/mock_pairing_repository.dart';
 import 'settings_provider.dart';
+
+final demoModeProvider = StateProvider<bool>((ref) => false);
+
+final pairingRepositoryProvider = Provider<PairingRepository>((ref) {
+  final demoMode = ref.watch(demoModeProvider);
+  if (Firebase.apps.isEmpty || demoMode) {
+    return MockPairingRepository();
+  }
+  return PairingRepositoryImpl();
+});
 
 class PairingState {
   final PairingModel? pairing;
@@ -42,11 +54,13 @@ class PairingState {
 }
 
 class PairingNotifier extends StateNotifier<PairingState> {
-  final PairingRepository _repository = PairingRepositoryImpl();
+  final PairingRepository _repository;
   StreamSubscription<PairingModel?>? _stateSubscription;
   final Ref _ref;
 
-  PairingNotifier(this._ref) : super(PairingState(localDeviceName: 'Unknown Device')) {
+  PairingNotifier(this._ref)
+      : _repository = _ref.read(pairingRepositoryProvider),
+        super(PairingState(localDeviceName: 'Unknown Device')) {
     _initDeviceName();
   }
 

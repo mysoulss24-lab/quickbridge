@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quickbridge/core/theme/theme.dart';
 import 'package:quickbridge/presentation/providers/pairing_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_error_screen.dart';
 import '../android/scan_qr_screen.dart';
 import '../android/android_connected_screen.dart';
 import '../windows/qr_pair_screen.dart';
@@ -46,25 +48,42 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
     await Future.delayed(const Duration(milliseconds: 2500));
     if (!mounted) return;
 
-    final pairingState = ref.read(pairingProvider);
-    final bool isPaired = pairingState.pairing != null && pairingState.pairing?.status == 'paired';
+    try {
+      final isDemoMode = ref.read(demoModeProvider);
+      if (Firebase.apps.isEmpty && !isDemoMode) {
+        throw FirebaseException(
+          plugin: 'core',
+          message: 'Firebase has not been initialized. No apps configured.',
+        );
+      }
 
-    Widget nextScreen;
-    if (Platform.isAndroid) {
-      nextScreen = isPaired ? const AndroidConnectedScreen() : const ScanQRScreen();
-    } else {
-      nextScreen = isPaired ? const WindowsConnectedScreen() : const QRPairScreen();
+      final pairingState = ref.read(pairingProvider);
+      final bool isPaired = pairingState.pairing != null && pairingState.pairing?.status == 'paired';
+
+      Widget nextScreen;
+      if (Platform.isAndroid) {
+        nextScreen = isPaired ? const AndroidConnectedScreen() : const ScanQRScreen();
+      } else {
+        nextScreen = isPaired ? const WindowsConnectedScreen() : const QRPairScreen();
+      }
+
+      unawaited(Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      ));
+    } catch (e) {
+      debugPrint('Firebase not initialized or initialization failed: $e');
+      if (mounted) {
+        unawaited(Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const FirebaseConfigErrorScreen()),
+        ));
+      }
     }
-
-    unawaited(Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        transitionDuration: const Duration(milliseconds: 500),
-      ),
-    ));
   }
 
   @override
