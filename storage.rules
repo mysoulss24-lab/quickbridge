@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // File Transfer Storage Path Rules
+    match /pairings/{pairId}/files/{fileId} {
+      
+      // Allow read, write, and delete if path contains the secure 16-char pairId.
+      // Enforce file size limit (200 MB) and MIME types on upload.
+      allow read, delete: if true;
+      
+      allow write: if request.resource.size <= 209715200 // 200 MB size limit
+        && (
+          request.resource.contentType == 'application/pdf' ||
+          request.resource.contentType == 'application/msword' ||
+          request.resource.contentType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+          request.resource.contentType.matches('image/jpeg') ||
+          request.resource.contentType.matches('image/png')
+        );
+    }
+  }
+}

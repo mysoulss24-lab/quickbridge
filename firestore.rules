@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Pairing Session Collection Rules
+    match /pairings/{pairId} {
+      // Anyone can create a pairing session.
+      // Read and update require knowledge of the unique 16-char random pairId.
+      allow create: if true;
+      allow get, update: if true;
+      
+      // Prevent deletion of session history by third parties.
+      allow delete: if false;
+
+      // File Metadata Subcollection Rules
+      match /transfers/{fileId} {
+        // Read, write, and delete require knowledge of the unique pairId.
+        // Validates file metadata schema on creation.
+        allow read, delete: if true;
+        allow create, update: if request.resource.data.fileId == fileId
+          && request.resource.data.fileSize <= 209715200 // Max 200MB size limit validation
+          && request.resource.data.fileType in ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png']; // Valid extension list
+      }
+    }
+  }
+}

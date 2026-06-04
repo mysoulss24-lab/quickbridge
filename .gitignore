@@ -1,0 +1,24 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android
+.gradle/
+local.properties
+*.apk
+*.ap_
+*.aab
+
+# Windows
+build/
+bin/
+obj/
+
+# Operating System
+.DS_Store
+Thumbs.db
