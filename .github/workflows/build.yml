@@ -58,8 +58,17 @@ jobs:
       - name: Build Windows EXE
         run: flutter build windows --release
 
+      - name: Build MSIX Package
+        run: dart run msix:create
+
       - name: Upload Windows Build Folder
         uses: actions/upload-artifact@v4
         with:
           name: QuickBridge-Windows-EXE
           path: build/windows/x64/runner/Release/
+
+      - name: Upload Windows MSIX Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: QuickBridge-Windows-MSIX
+          path: build/windows/x64/runner/Release/*.msix
